@@ -1,55 +1,92 @@
 // GET REQUEST
 function getTodos() {
-  console.log('GET Request');
+  axios
+    .get("https://jsonplaceholder.typicode.com/todos?_limit=5")
+    .then((res) => showOutput(res))
+    .catch((err) => console.log(err));
 }
 
 // POST REQUEST
 function addTodo() {
-  console.log('POST Request');
+  axios
+    .post("https://jsonplaceholder.typicode.com/todos", {
+      title: "Custom Task",
+      completed: false,
+    })
+    .then((res) => showOutput(res))
+    .catch((err) => console.log(err));
 }
 
 // PUT/PATCH REQUEST
 function updateTodo() {
-  console.log('PUT/PATCH Request');
+  axios
+    .patch("https://jsonplaceholder.typicode.com/todos/1", {
+      title: "updated task",
+    })
+    .then((res) => showOutput(res))
+    .catch((err) => console.log(err));
 }
 
 // DELETE REQUEST
 function removeTodo() {
-  console.log('DELETE Request');
+  axios
+    .delete("https://jsonplaceholder.typicode.com/todos/1")
+    .then((res) => showOutput(res))
+    .catch((err) => console.log(err));
 }
 
 // SIMULTANEOUS DATA
 function getData() {
-  console.log('Simultaneous Request');
+  axios
+    .all([
+      axios.get("https://jsonplaceholder.typicode.com/todos?_limit=5"),
+      axios.get("https://jsonplaceholder.typicode.com/posts?_limit=5"),
+    ])
+    .then(axios.spread((todos, posts) => showOutput(posts)))
+    .catch((err) => console.log(err));
 }
 
 // CUSTOM HEADERS
 function customHeaders() {
-  console.log('Custom Headers');
+  console.log("Custom Headers");
 }
 
 // TRANSFORMING REQUESTS & RESPONSES
 function transformResponse() {
-  console.log('Transform Response');
+  console.log("Transform Response");
 }
 
 // ERROR HANDLING
 function errorHandling() {
-  console.log('Error Handling');
+  console.log("Error Handling");
 }
 
 // CANCEL TOKEN
 function cancelToken() {
-  console.log('Cancel Token');
+  console.log("Cancel Token");
 }
 
 // INTERCEPTING REQUESTS & RESPONSES
+axios.interceptors.request.use(
+  (config) => {
+    console.log(
+      `${config.method.toUpperCase()} sent to ${
+        config.url
+      } at ${new Date().getTime()}`
+    );
+    return config;
+  },
+  (err) => {
+    console.log(err);
+    return err;
+  }
+);
 
 // AXIOS INSTANCES
 
 // Show output in browser
 function showOutput(res) {
-  document.getElementById('res').innerHTML = `
+  document.getElementById("res").innerHTML = `
   <div class="card card-body mb-4">
     <h5>Status: ${res.status}</h5>
   </div>
@@ -84,14 +121,14 @@ function showOutput(res) {
 }
 
 // Event listeners
-document.getElementById('get').addEventListener('click', getTodos);
-document.getElementById('post').addEventListener('click', addTodo);
-document.getElementById('update').addEventListener('click', updateTodo);
-document.getElementById('delete').addEventListener('click', removeTodo);
-document.getElementById('sim').addEventListener('click', getData);
-document.getElementById('headers').addEventListener('click', customHeaders);
+document.getElementById("get").addEventListener("click", getTodos);
+document.getElementById("post").addEventListener("click", addTodo);
+document.getElementById("update").addEventListener("click", updateTodo);
+document.getElementById("delete").addEventListener("click", removeTodo);
+document.getElementById("sim").addEventListener("click", getData);
+document.getElementById("headers").addEventListener("click", customHeaders);
 document
-  .getElementById('transform')
-  .addEventListener('click', transformResponse);
-document.getElementById('error').addEventListener('click', errorHandling);
-document.getElementById('cancel').addEventListener('click', cancelToken);
+  .getElementById("transform")
+  .addEventListener("click", transformResponse);
+document.getElementById("error").addEventListener("click", errorHandling);
+document.getElementById("cancel").addEventListener("click", cancelToken);
